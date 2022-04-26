@@ -18,6 +18,7 @@ namespace SocialNetwork.BLL.Services
         Task<DAL.Identity.Models.User> GetUserByIdAsync(string userId);
         Task<bool> FollowAsync(string userId, string destId);
         Task<Profile> GetProfileByIdAsync(string userId);
-
+        Task<DTO.Entities.User> GetUserResourcesById(string userId);
+        Task<List<DTO.Entities.User>> SearchUser(string userName);
     }
 }

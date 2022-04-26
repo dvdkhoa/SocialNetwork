@@ -73,6 +73,11 @@ namespace SocialNetwork.BLL.Services.Implements
             return await _userManager.FindByIdAsync(userId);
         }
 
+        public Task<DTO.Entities.User> GetUserResourcesById(string userId)
+        {
+            return _userRepository.GetUserResourcesByIdAsync(userId);
+        }
+
         public async Task<ApiResponse> LoginAsync(LoginModel loginModel)
         {
             var user = await _userManager.FindByEmailAsync(loginModel.UserName);
@@ -112,6 +117,11 @@ namespace SocialNetwork.BLL.Services.Implements
                     Profile = await this.GetProfileByIdAsync(user.Id)
                 }
             };
+        }
+
+        public Task<List<DTO.Entities.User>> SearchUser(string userName)
+        {
+            return _userRepository.SearchUser(userName);
         }
 
         private string GenerateToken(IEnumerable<Claim> claims)

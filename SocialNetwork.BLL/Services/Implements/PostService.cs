@@ -28,7 +28,7 @@ namespace SocialNetwork.BLL.Services.Implements
             return newComment;
         }
 
-        public async Task<Post> CreatePostAsync(string userId, string text, params Photo[] photos)
+        public async Task<Post> CreatePostAsync(string userId, string text, params Photo[]? photos)
         {
             await _postRepository.CreateAsync(userId, text, photos);
 

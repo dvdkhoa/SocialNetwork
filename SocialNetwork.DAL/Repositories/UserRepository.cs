@@ -64,5 +64,18 @@ namespace SocialNetwork.DAL.Repositories
             return _context.Users.Find(x => x.Id == userId).Project(x => x.Profile).SingleOrDefaultAsync();
         }
 
+        public async Task<User> GetUserResourcesByIdAsync(string userId)
+        {
+            var user = (await _context.Users.FindAsync(user => user.Id == userId)).FirstOrDefault();
+
+            return user;
+        }
+
+        public async Task<List<User>> SearchUser(string userName)
+        {
+            var users =  (await _context.Users.FindAsync(user => user.Profile.Name.Contains(userName))).ToList();
+
+            return users;
+        }
     }
 }

@@ -25,7 +25,8 @@ namespace SocialNetwork.Api.Controllers
         public async Task<IActionResult> CreatePostAsync([FromForm]CreatePostModel createPostModel)
         {
             string PhotoName = "";
-            if(createPostModel.PhotoFile.Length > 0)
+            List<Photo>? list = null;
+            if (createPostModel.PhotoFile?.Length > 0)
             {
                 var path = Path.Combine(_env.WebRootPath, "imgs", createPostModel.PhotoFile.FileName);
 
@@ -34,18 +35,18 @@ namespace SocialNetwork.Api.Controllers
                     await createPostModel.PhotoFile.CopyToAsync(stream);
                 }
                 PhotoName = Path.Combine("imgs", createPostModel.PhotoFile.FileName);
+
+                list = new List<Photo>
+                {
+                    new Photo
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Url = PhotoName
+                    }
+                };
             }
 
-            var list = new List<Photo>
-            {
-                new Photo
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Url = PhotoName
-                }
-            };
-
-            var newPost = await _postService.CreatePostAsync(createPostModel.UserId, createPostModel.Text, list.ToArray());
+            var newPost = await _postService.CreatePostAsync(createPostModel.UserId, createPostModel.Text, list?.ToArray());
 
             var newPostViewModel = new
             {

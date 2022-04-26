@@ -97,6 +97,27 @@ namespace SocialNetwork.Api.Controllers
                 return Ok(result);
             return BadRequest(result);
         }
+
+        [HttpGet("GetUser")]
+        public async Task<IActionResult> GetUser(string userId)
+        {
+            var userResources = await _accountService.GetUserResourcesById(userId);
+
+            var apiUserResponse = new
+            {
+                userId = userResources.Id,
+                userResources.Meta,
+                userResources.Profile,
+                userResources.Followers
+            };
+
+            return Ok(apiUserResponse);
+        }
         
+        [HttpGet("SearchUser")]
+        public async Task<IActionResult> SearchUser(string userName)
+        {
+            return Ok(await _accountService.SearchUser(userName));
+        }
     }
 }
