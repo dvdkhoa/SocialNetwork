@@ -35,6 +35,11 @@ namespace SocialNetwork.BLL.Services.Implements
             return _postRepository.GetNewPost();
         }
 
+        public Task<List<Comment>> GetCommentsByPostId(string postId)
+        {
+            return _postRepository.GetCommentsByPostId(postId);
+        }
+
         public async Task<List<Post>> GetNewsFeed(string userId, int page = 0)
         {
             return await _postRepository.GetNewsFeed(userId, page);

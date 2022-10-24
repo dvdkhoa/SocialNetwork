@@ -14,5 +14,6 @@ namespace SocialNetwork.BLL.Services
         public Task<Post> CreatePostAsync(string userId, string text, params Photo[]? photos);
         public Task<Comment> CommentAsync(string userId, string postId, string text);
         public Task<int> LikeAsync(string userId, string postId);
+        public Task<List<Comment>> GetCommentsByPostId(string postId);
     }
 }

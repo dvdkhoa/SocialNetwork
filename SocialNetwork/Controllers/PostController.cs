@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using MongoDB.Bson;
+using SocialNetwork.Api.Hubs;
 using SocialNetwork.BLL.Services;
+using SocialNetwork.BLL.Services.Implements;
 using SocialNetwork.DTO.Entities;
 using SocialNetwork.DTO.Posts;
 using SocialNetwork.DTO.Shared;
@@ -14,11 +17,13 @@ namespace SocialNetwork.Api.Controllers
     {
         private readonly IPostService _postService;
         private readonly IWebHostEnvironment _env;
+        private readonly IHubContext<NotifyHub> _notifyHubContext;
 
-        public PostController(IPostService postService, IWebHostEnvironment env)
+        public PostController(IPostService postService, IWebHostEnvironment env, IHubContext<NotifyHub> notifyHubContext)
         {
             _postService = postService;
             _env = env;
+            _notifyHubContext = notifyHubContext;
         }
 
         [HttpPost("CreatePost")]
@@ -58,6 +63,9 @@ namespace SocialNetwork.Api.Controllers
                 newPost.Comments,
                 newPost.Likes
             };
+            
+
+            await _notifyHubContext.Clients.All.SendAsync("receiveMessage", $"Tài khoản có userId: {createPostModel.UserId} đăng tải {createPostModel.Text}");
 
             return Ok(new ApiResponse
             {
@@ -99,13 +107,13 @@ namespace SocialNetwork.Api.Controllers
         {
             var posts = await _postService.GetWallFeed(userId, 0);
 
-            var postsViewModel = posts.Select(post =>
+            var postsViewModel = posts?.Select(post =>
             {
                 return new
                 {
                     id = post.Id.ToString(),
                     post.By,
-                    
+                    post.Meta,
                     post.Type,
                     post.Detail,
                     post.Comments,
@@ -139,6 +147,20 @@ namespace SocialNetwork.Api.Controllers
             {
                 Data = new { likeCount = likeCount },
                 IsSuccess = true
+            });
+        }
+
+
+        [HttpGet("Comments")]
+        public async Task<IActionResult> GetComments(string postId)
+        {
+            var comments = await _postService.GetCommentsByPostId(postId);
+
+            return Ok(new ApiResponse
+            {
+                Data= comments,
+                IsSuccess = true
+
             });
         }
     }

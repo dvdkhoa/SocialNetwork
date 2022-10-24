@@ -63,6 +63,16 @@ namespace SocialNetwork.BLL.Services.Implements
             return await _userRepository.FollowAsync(userId, destId);
         }
 
+        public Task<List<DTO.Entities.User>> GetAllUser()
+        {
+            return _userRepository.GetAllUserResourcesAsync();
+        }
+
+        public List<string> GetFollowings(string userId)
+        {
+            return _userRepository.GetFollowings(userId);
+        }
+
         public Task<DTO.Entities.Profile> GetProfileByIdAsync(string userId)
         {
             return _userRepository.ProfileAsync(userId);

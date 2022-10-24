@@ -158,5 +158,14 @@ namespace SocialNetwork.DAL.Repositories
 
             return newPost;
         }
+
+
+        public async Task<List<Comment>> GetCommentsByPostId(string postId)
+        {
+            var post = await (await _context.Posts.FindAsync(p => p.Id == ObjectId.Parse(postId))).FirstOrDefaultAsync();
+
+
+            return post.Comments;
+        }
     }
 }
