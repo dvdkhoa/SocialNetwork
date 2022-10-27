@@ -163,5 +163,20 @@ namespace SocialNetwork.Api.Controllers
 
             });
         }
+
+
+        [HttpPut("UpdatePost")]
+        public async Task<IActionResult> UpdatePostAsync(string postId, string text)
+        {
+            await _postService.UpdatePostAsync(postId, text);
+            return Ok();
+        }
+
+        [HttpDelete("DeletePost")]
+        public async Task<IActionResult> DeletePostAsync(string postId)
+        {
+            await _postService.DeletePostAsync(postId);
+            return Ok();
+        }
     }
 }

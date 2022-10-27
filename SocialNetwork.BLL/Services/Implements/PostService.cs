@@ -35,6 +35,11 @@ namespace SocialNetwork.BLL.Services.Implements
             return _postRepository.GetNewPost();
         }
 
+        public Task DeletePostAsync(string postId)
+        {
+            return _postRepository.DeletePostAsync(postId);
+        }
+
         public Task<List<Comment>> GetCommentsByPostId(string postId)
         {
             return _postRepository.GetCommentsByPostId(postId);
@@ -61,6 +66,11 @@ namespace SocialNetwork.BLL.Services.Implements
             var post = await _postRepository.GetPostById(postId);
 
             return post.Likes.Count();
+        }
+
+        public Task UpdatePostAsync(string postId, string text)
+        {
+            return _postRepository.UpdatePostAsync(postId, text);
         }
     }
 }

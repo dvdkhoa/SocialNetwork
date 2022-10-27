@@ -105,5 +105,34 @@ namespace SocialNetwork.DAL.Repositories
                 _context.Wall.UpdateManyAsync(filter, update),
                 _context.News.UpdateManyAsync(filter, update));
         }
+
+        public async Task AppendUpdatePostAsync(ObjectId postId, Post post)
+        {
+            await Task.WhenAll(
+                _context.Wall.UpdateManyAsync(
+                    Builders<Feed>.Filter.Eq("Posts._id", postId),
+                    Builders<Feed>.Update.Set("Posts.$", post)),    
+                _context.News.UpdateManyAsync(
+                    Builders<Feed>.Filter.Eq("Posts._id", postId),
+                    Builders<Feed>.Update.Set("Posts.$", post))
+            );
+        }
+
+        public async Task AppendDeletePostAsync(ObjectId postId)
+        {
+            var update = new BsonDocument
+            {
+                { "$pull", new BsonDocument{ { "Posts", new BsonDocument { { "_id", postId } } } } }
+            };
+
+            await Task.WhenAll(
+                _context.Wall.UpdateManyAsync(
+                        Builders<Feed>.Filter.Eq("Posts._id", postId),
+                        update),
+                _context.Wall.UpdateManyAsync(
+                            Builders<Feed>.Filter.Eq("Posts._id", postId),
+                            update
+           ));
+        }
     }
 }
