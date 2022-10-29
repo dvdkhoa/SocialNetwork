@@ -83,19 +83,30 @@ namespace SocialNetwork.Api.Controllers
         {
             var result = await _accountService.LoginAsync(loginModel);
             if (result.IsSuccess)
+            {
                 return Ok(result);
+            }    
             return BadRequest(result);
         }
 
 
         [HttpPost("Follow")]
-        public async Task<IActionResult> Follow(string userId, string destId)
+        public async Task<IActionResult> Follow(FollowModel followModel)
         {
-            var result = await _accountService.FollowAsync(userId, destId);
+            var result = await _accountService.FollowAsync(followModel.userId, followModel.destId);
 
             if(result)
                 return Ok(result);
             return BadRequest(result);
+        }
+
+        [HttpGet("GetAllUser")]
+        public async Task<IActionResult> GetUsersAsync()
+        {
+            return Ok( new
+            {
+                users = await _accountService.GetAllUser()
+            });;
         }
 
         [HttpGet("GetUser")]
@@ -119,5 +130,6 @@ namespace SocialNetwork.Api.Controllers
         {
             return Ok(await _accountService.SearchUser(userName));
         }
+
     }
 }

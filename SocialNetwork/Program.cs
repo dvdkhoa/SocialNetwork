@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SocialNetwork.Api.Helpers;
+using SocialNetwork.Api.Hubs;
 using SocialNetwork.DTO.Extensions;
 using SocialNetwork.Ioc;
 using System.Text;
@@ -17,6 +18,9 @@ dependencyInjection.InjectDependencies(builder.Services);
 
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
+
+builder.Services.AddSignalR( e => e.MaximumReceiveMessageSize = 102400000);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -84,7 +88,8 @@ app.UseCors(x => x
 //app.UseAuthorization();
 app.UseMiddleware<JwtMiddleware>();
 
-
 app.MapControllers();
+
+app.MapHub<NotifyHub>("/notifyHub");
 
 app.Run();

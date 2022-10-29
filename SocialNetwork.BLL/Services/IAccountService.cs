@@ -15,10 +15,12 @@ namespace SocialNetwork.BLL.Services
     {
         Task<IdentityResult> CreateUserAsync(RegisterModel registerModel);
         Task<ApiResponse> LoginAsync(LoginModel loginModel);
+        Task<List<DTO.Entities.User>> GetAllUser();
         Task<DAL.Identity.Models.User> GetUserByIdAsync(string userId);
         Task<bool> FollowAsync(string userId, string destId);
         Task<Profile> GetProfileByIdAsync(string userId);
         Task<DTO.Entities.User> GetUserResourcesById(string userId);
         Task<List<DTO.Entities.User>> SearchUser(string userName);
+        public List<string> GetFollowings(string userId);
     }
 }

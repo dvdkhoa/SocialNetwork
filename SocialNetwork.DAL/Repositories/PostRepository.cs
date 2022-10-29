@@ -158,5 +158,37 @@ namespace SocialNetwork.DAL.Repositories
 
             return newPost;
         }
+
+
+        public async Task<List<Comment>> GetCommentsByPostId(string postId)
+        {
+            var post = await (await _context.Posts.FindAsync(p => p.Id == ObjectId.Parse(postId))).FirstOrDefaultAsync();
+
+
+            return post.Comments;
+        }
+
+
+        public async Task UpdatePostAsync(string postId, string text)
+        {
+            var post = await (await _context.Posts.FindAsync(p => p.Id == ObjectId.Parse(postId))).FirstOrDefaultAsync();
+            if (post is null)
+                return;
+            post.Detail.Text = text;
+            post.Meta.Updated = DateTime.Now;
+
+            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, post.Id);
+
+            await _context.Posts.ReplaceOneAsync(filter, post);
+            await AppendUpdatePostAsync(post.Id, post);
+        }
+
+        public async Task DeletePostAsync(string postId)
+        {
+            var objectPostId = ObjectId.Parse(postId);
+            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, objectPostId);
+            await _context.Posts.DeleteOneAsync(filter);
+            await AppendDeletePostAsync(objectPostId);
+        }
     }
 }
