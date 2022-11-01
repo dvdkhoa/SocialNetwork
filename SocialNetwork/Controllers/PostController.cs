@@ -30,24 +30,27 @@ namespace SocialNetwork.Api.Controllers
         [HttpPost("CreatePost")]
         public async Task<IActionResult> CreatePostAsync([FromForm]CreatePostModel createPostModel)
         {
-            string PhotoName = "";
-            List<Photo>? list = null;
+            List<PostFile>? list = null;
             if (createPostModel.PhotoFile?.Length > 0)
             {
-                var path = Path.Combine(_env.WebRootPath, "imgs", createPostModel.PhotoFile.FileName);
+                string? fileType = Path.GetExtension(createPostModel.PhotoFile.FileName);
+                string newName = Guid.NewGuid().ToString() + fileType;
+                var path = Path.Combine(_env.WebRootPath, "uploads", newName);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await createPostModel.PhotoFile.CopyToAsync(stream);
                 }
-                PhotoName = Path.Combine("imgs", createPostModel.PhotoFile.FileName);
 
-                list = new List<Photo>
+                string fileName = Path.Combine("uploads", newName);
+
+                list = new List<PostFile>
                 {
-                    new Photo
+                    new PostFile
                     {
                         Id = Guid.NewGuid().ToString(),
-                        Url = PhotoName
+                        Url = fileName,
+                        FileType = fileType == ".mp4" ? FileType.Video : FileType.Image
                     }
                 };
             }

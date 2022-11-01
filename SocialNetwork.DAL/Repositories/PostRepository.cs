@@ -18,7 +18,7 @@ namespace SocialNetwork.DAL.Repositories
 
         }
 
-        public Task CreateAsync(string userId, string text, params Photo[] photos)
+        public Task CreateAsync(string userId, string text, params PostFile[] photos)
         {
             var profile = _context.Users.Find(x => x.Id == userId)
                 .Project(x => x.Profile)
@@ -36,15 +36,15 @@ namespace SocialNetwork.DAL.Repositories
 
         }
 
-        public Task CreateAsync(Owner owner, string text, List<Photo> photos)
+        public Task CreateAsync(Owner owner, string text, List<PostFile> files)
         {
-            if (photos == null)
-                throw new ArgumentNullException(nameof(photos));
+            if (files == null)
+                throw new ArgumentNullException(nameof(files));
 
             var post = new Post
             {
                 By = owner,
-                Detail = new Detail { Text = text, Photos = photos },
+                Detail = new Detail { Text = text, PostFiles = files },
                 Type = PostType.Photo,
             };
 
