@@ -32,7 +32,8 @@ namespace SocialNetwork.DAL.Repositories
 
         public async Task CreateAsync(User user)
         {
-            await Task.WhenAll(_context.Users.InsertOneAsync(user),
+            await Task.WhenAll(
+                _context.Users.InsertOneAsync(user),
                 _context.Wall.InsertOneAsync(new Feed { UserId = user.Id }),
                 _context.News.InsertOneAsync(new Feed { UserId = user.Id }));
         }
