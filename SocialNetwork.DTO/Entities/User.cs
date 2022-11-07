@@ -11,5 +11,7 @@ namespace SocialNetwork.DTO.Entities
         public Profile Profile { get; set; }
 
         public Dictionary<string, Profile> Followers { get; set; } = new Dictionary<string, Profile>();
+
+        public List<Notification> Notifications { get; set; } = new List<Notification>();
     }
 }

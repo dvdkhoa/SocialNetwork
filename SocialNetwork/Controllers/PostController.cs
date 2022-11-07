@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using MongoDB.Bson;
+using SocialNetwork.Api.Helpers;
 using SocialNetwork.Api.Hubs;
 using SocialNetwork.BLL.Services;
 using SocialNetwork.BLL.Services.Implements;
@@ -33,16 +34,17 @@ namespace SocialNetwork.Api.Controllers
             List<PostFile>? list = null;
             if (createPostModel.PhotoFile?.Length > 0)
             {
+
+                //string newName = Guid.NewGuid().ToString() + fileType;
+                //var path = Path.Combine(_env.WebRootPath, "uploads", newName);
+
+                //using (var stream = new FileStream(path, FileMode.Create))
+                //{
+                //    await createPostModel.PhotoFile.CopyToAsync(stream);
+                //}
                 string? fileType = Path.GetExtension(createPostModel.PhotoFile.FileName);
-                string newName = Guid.NewGuid().ToString() + fileType;
-                var path = Path.Combine(_env.WebRootPath, "uploads", newName);
 
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await createPostModel.PhotoFile.CopyToAsync(stream);
-                }
-
-                string fileName = Path.Combine("uploads", newName);
+                string fileName = await CloudinaryHelper.UploadFileToCloudinary(createPostModel.PhotoFile, fileType);
 
                 list = new List<PostFile>
                 {
@@ -84,7 +86,7 @@ namespace SocialNetwork.Api.Controllers
         {
             var posts = await _postService.GetNewsFeed(userId, 0);
 
-            var postsViewModel = posts.Select(post =>
+            var postsViewModel = posts?.Select(post =>
             {
                 return new
                 {

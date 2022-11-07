@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Api.Helpers;
 
 namespace SocialNetwork.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TestController : ControllerBase
@@ -13,10 +16,17 @@ namespace SocialNetwork.Api.Controllers
         {
             return Ok("Hello world");
         }
+        //[HttpPost]
+        //public IActionResult CreateTest(string naem)
+        //{
+        //    return Ok(naem);
+        //}
+
         [HttpPost]
-        public IActionResult CreateTest(string naem)
+        public async Task<IActionResult> UploadFileToCloudinary(IFormFile formFile) 
         {
-            return Ok(naem);
+            
+            return Ok(await CloudinaryHelper.UploadFileToCloudinary(formFile));
         }
     }
 }
