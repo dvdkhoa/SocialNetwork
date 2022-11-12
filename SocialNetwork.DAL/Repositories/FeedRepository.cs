@@ -126,7 +126,7 @@ namespace SocialNetwork.DAL.Repositories
             };
 
             await Task.WhenAll(
-                _context.Wall.UpdateManyAsync(
+                _context.News.UpdateManyAsync(
                         Builders<Feed>.Filter.Eq("Posts._id", postId),
                         update),
                 _context.Wall.UpdateManyAsync(
