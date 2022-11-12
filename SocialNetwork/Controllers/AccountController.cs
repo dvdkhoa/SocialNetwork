@@ -134,7 +134,7 @@ namespace SocialNetwork.Api.Controllers
         }
 
 
-        [HttpPost("ChangeAvatar")]
+        [HttpPut("ChangeAvatar")]
         public async Task<IActionResult> ChangeAvatarAsync(string userId, IFormFile file)
         {
             bool result = false;
@@ -157,6 +157,32 @@ namespace SocialNetwork.Api.Controllers
                 Data = result,
                 IsSuccess = true,
                 Message = "Change avatar successfully"
+            });
+        }
+
+        [HttpPut("ChangeBackground")]
+        public async Task<IActionResult> ChangeBackgroundAsync(string userId, IFormFile file)
+        {
+            bool result = false;
+
+            if (userId == null || file == null)
+                return BadRequest();
+
+            var user = await _accountService.GetUserResourcesById(userId);
+            if (user is null)
+                return BadRequest();
+
+            var url = await CloudinaryHelper.UploadFileToCloudinary(file);
+            if (url != null)
+            {
+                result = await _accountService.ChangeBackGroundAsync(userId, url);
+            }
+
+            return Ok(new ApiResponse
+            {
+                Data = result,
+                IsSuccess = true,
+                Message = "Change background successfully"
             });
         }
     }

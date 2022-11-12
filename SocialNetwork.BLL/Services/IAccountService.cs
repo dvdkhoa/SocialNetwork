@@ -23,5 +23,6 @@ namespace SocialNetwork.BLL.Services
         Task<List<DTO.Entities.User>> SearchUser(string userName);
         List<string> GetFollowings(string userId);
         Task<bool> ChangeAvatar(string userId, string url);
+        Task<bool> ChangeBackGroundAsync(string userId, string url);
     }
 }

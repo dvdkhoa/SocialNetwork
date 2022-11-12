@@ -38,6 +38,11 @@ namespace SocialNetwork.BLL.Services.Implements
             return _userRepository.ChangeAvatar(userId, url);
         }
 
+        public Task<bool> ChangeBackGroundAsync(string userId, string url)
+        {
+            return _userRepository.ChangeBackGroundAsync(userId, url);
+        }
+
         public async Task<IdentityResult> CreateUserAsync(RegisterModel registerModel)
         {
             var user = new User()
