@@ -6,6 +6,8 @@
 
         public string Image { get; set; }
 
+        public string BackGround { get; set; }
+
         public string Gender { get; set; }
 
         public Profile()

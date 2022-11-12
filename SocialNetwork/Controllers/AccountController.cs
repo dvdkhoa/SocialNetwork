@@ -5,10 +5,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SocialNetwork.Api.Helpers;
 using SocialNetwork.BLL.Services;
 using SocialNetwork.DAL.Identity.Models;
 using SocialNetwork.DTO.Account;
 using SocialNetwork.DTO.Extensions;
+using SocialNetwork.DTO.Shared;
 using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -131,5 +133,31 @@ namespace SocialNetwork.Api.Controllers
             return Ok(await _accountService.SearchUser(userName));
         }
 
+
+        [HttpPost("ChangeAvatar")]
+        public async Task<IActionResult> ChangeAvatarAsync(string userId, IFormFile file)
+        {
+            bool result = false;
+
+            if (userId == null || file == null)
+                return BadRequest();
+
+            var user = await _accountService.GetUserResourcesById(userId);
+            if (user is null)
+                return BadRequest();
+
+            var url = await CloudinaryHelper.UploadFileToCloudinary(file);
+            if(url != null)
+            {
+                result = await _accountService.ChangeAvatar(userId, url);
+            }
+
+            return Ok(new ApiResponse
+            {
+                Data = result,
+                IsSuccess = true,
+                Message = "Change avatar successfully"
+            });
+        }
     }
 }

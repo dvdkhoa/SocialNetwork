@@ -21,6 +21,7 @@ namespace SocialNetwork.BLL.Services
         Task<Profile> GetProfileByIdAsync(string userId);
         Task<DTO.Entities.User> GetUserResourcesById(string userId);
         Task<List<DTO.Entities.User>> SearchUser(string userName);
-        public List<string> GetFollowings(string userId);
+        List<string> GetFollowings(string userId);
+        Task<bool> ChangeAvatar(string userId, string url);
     }
 }
