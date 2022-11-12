@@ -124,5 +124,35 @@ namespace SocialNetwork.DAL.Repositories
 
             return followingsAsString;
         }
+
+
+        public async Task<bool> ChangeAvatar(string userId, string url)
+        {
+            var user = await GetUserResourcesByIdAsync(userId);
+            user.Profile.Image = url;
+
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+
+            var result = await _context.Users.ReplaceOneAsync(filter, user);
+
+            return result.ModifiedCount > 0;
+
+            //await _context.Users.UpdateOneAsync(
+            //   u => u.Id == userId,
+
+            //)
+        }
+        
+        public async Task<bool> ChangeBackGroundAsync(string userId, string url)
+        {
+            var user = await GetUserResourcesByIdAsync(userId);
+            user.Profile.Background = url;
+
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+
+            var result = await _context.Users.ReplaceOneAsync(filter, user);
+
+            return result.ModifiedCount > 0;
+        }
     }
 }

@@ -33,6 +33,16 @@ namespace SocialNetwork.BLL.Services.Implements
             _appSettings = appSettings.CurrentValue;
         }
 
+        public Task<bool> ChangeAvatar(string userId, string url)
+        {
+            return _userRepository.ChangeAvatar(userId, url);
+        }
+
+        public Task<bool> ChangeBackGroundAsync(string userId, string url)
+        {
+            return _userRepository.ChangeBackGroundAsync(userId, url);
+        }
+
         public async Task<IdentityResult> CreateUserAsync(RegisterModel registerModel)
         {
             var user = new User()
