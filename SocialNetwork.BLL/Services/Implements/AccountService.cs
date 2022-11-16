@@ -22,20 +22,52 @@ namespace SocialNetwork.BLL.Services.Implements
         private readonly UserManager<User> _userManager;
         private readonly UserRepository _userRepository;
         private readonly AppSettings _appSettings;
+        private readonly IPostService _postService;
 
 
 
 
-        public AccountService(UserManager<User> userManager, UserRepository userRepository,  IOptionsMonitor<AppSettings> appSettings)
+        public AccountService(UserManager<User> userManager, UserRepository userRepository, IOptionsMonitor<AppSettings> appSettings, IPostService postService)
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _appSettings = appSettings.CurrentValue;
+            _postService = postService;
         }
 
-        public Task<bool> ChangeAvatar(string userId, string url)
+        public async Task<bool> ChangeAvatar(string userId, string url)
         {
-            return _userRepository.ChangeAvatar(userId, url);
+            var wall = await _postService.GetWallById(userId);
+            var news = await _postService.GetNewsById(userId);
+
+           if(wall != null)
+            {
+                wall.Posts.ForEach(post =>
+                {
+                    if (post.By.Id == userId)
+                    {
+                        post.By.Image = url;
+                    }
+                });
+
+            }
+            if (news != null)
+            {
+                news.Posts.ForEach(post =>
+                {
+                    if (post.By.Id == userId)
+                    {
+                        post.By.Image = url;
+                    }
+                });
+            }
+            Task.WaitAll(
+                _userRepository.ChangeAvatar(userId, url),
+                _postService.UpdateWallPosts(userId, wall.Posts),
+                _postService.UpdateNewsPosts(userId, wall.Posts)
+            );
+
+            return true;
         }
 
         public Task<bool> ChangeBackGroundAsync(string userId, string url)
