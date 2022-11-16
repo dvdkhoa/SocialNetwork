@@ -158,6 +158,8 @@ namespace SocialNetwork.BLL.Services.Implements
 
             var token = GenerateToken(claims);
 
+            var userResources = await GetUserResourcesById(user.Id);
+
             return new ApiResponse
             {
                 IsSuccess = true,
@@ -166,7 +168,8 @@ namespace SocialNetwork.BLL.Services.Implements
                 {
                     token = token,
                     userId = user.Id,
-                    Profile = await this.GetProfileByIdAsync(user.Id)
+                    Profile = await this.GetProfileByIdAsync(user.Id),
+                    Followers = userResources.Followers,
                 }
             };
         }
