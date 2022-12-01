@@ -34,7 +34,8 @@ namespace SocialNetwork.DAL.Repositories
         {
             await Task.WhenAll(_context.Users.InsertOneAsync(user),
                 _context.Wall.InsertOneAsync(new Feed { UserId = user.Id }),
-                _context.News.InsertOneAsync(new Feed { UserId = user.Id }));
+                _context.News.InsertOneAsync(new Feed { UserId = user.Id}),
+                _context.Mess.InsertOneAsync(new Messengers { UserId = user.Id }));
         }
 
         public async Task<bool> FollowAsync(string userId, string destId)
@@ -136,11 +137,6 @@ namespace SocialNetwork.DAL.Repositories
             var result = await _context.Users.ReplaceOneAsync(filter, user);
 
             return result.ModifiedCount > 0;
-
-            //await _context.Users.UpdateOneAsync(
-            //   u => u.Id == userId,
-
-            //)
         }
         
         public async Task<bool> ChangeBackGroundAsync(string userId, string url)
@@ -151,6 +147,8 @@ namespace SocialNetwork.DAL.Repositories
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
 
             var result = await _context.Users.ReplaceOneAsync(filter, user);
+
+            
 
             return result.ModifiedCount > 0;
         }

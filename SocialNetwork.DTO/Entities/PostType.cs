@@ -3,6 +3,7 @@
     public enum PostType
     {
         Status,
-        Photo
+        Photo,
+        Share
     }
 }
