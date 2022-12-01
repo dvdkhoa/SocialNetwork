@@ -45,9 +45,19 @@ namespace SocialNetwork.BLL.Services.Implements
             return _postRepository.GetCommentsByPostId(postId);
         }
 
+        public Task<Feed> GetNewsById(string userId)
+        {
+            return _postRepository.GetNewsById(userId);
+        }
+
         public async Task<List<Post>> GetNewsFeed(string userId, int page = 0)
         {
             return await _postRepository.GetNewsFeed(userId, page);
+        }
+
+        public Task<Feed> GetWallById(string userId)
+        {
+            return _postRepository.GetWallById(userId);
         }
 
         public async Task<List<Post>> GetWallFeed(string userId, int page = 0)
@@ -68,9 +78,24 @@ namespace SocialNetwork.BLL.Services.Implements
             return post.Likes.Count();
         }
 
+        public Task ShareAsync(string userId, string postId)
+        {
+            return _postRepository.ShareAsync(userId, postId);
+        }
+
+        public Task UpdateNewsPosts(string userId, List<Post> posts)
+        {
+            return _postRepository.UpdateNewsPosts(userId, posts);
+        }
+
         public Task UpdatePostAsync(string postId, string text)
         {
             return _postRepository.UpdatePostAsync(postId, text);
+        }
+
+        public Task UpdateWallPosts(string userId, List<Post> posts)
+        {
+            return _postRepository.UpdateWallPosts(userId, posts);
         }
     }
 }

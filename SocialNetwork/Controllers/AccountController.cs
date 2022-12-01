@@ -154,7 +154,7 @@ namespace SocialNetwork.Api.Controllers
 
             return Ok(new ApiResponse
             {
-                Data = result,
+                Data = url,
                 IsSuccess = true,
                 Message = "Change avatar successfully"
             });
@@ -180,7 +180,7 @@ namespace SocialNetwork.Api.Controllers
 
             return Ok(new ApiResponse
             {
-                Data = result,
+                Data = url,
                 IsSuccess = true,
                 Message = "Change background successfully"
             });

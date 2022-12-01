@@ -6,6 +6,7 @@ using SocialNetwork.DTO.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -189,6 +190,67 @@ namespace SocialNetwork.DAL.Repositories
             FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, objectPostId);
             await _context.Posts.DeleteOneAsync(filter);
             await AppendDeletePostAsync(objectPostId);
+        }
+
+
+        public async Task<Feed> GetWallById(string userId) => await _context.Wall.Find(w => w.UserId == userId).Limit(1).SingleOrDefaultAsync();
+        //public async Task<Feed> GetWallById(string userId)
+        //{
+        //    //var wall = await _context.Wall.Find(Builders<Feed>.Filter.Eq(w => w.UserId, userId)).FirstOrDefaultAsync();
+
+        //    var wall = _context.Wall.Find(Builders<Feed>.Filter.Empty).ToList();
+
+        //    return wall[0];
+        //}
+
+
+        public async Task<Feed> GetNewsById(string userId) => await _context.News.Find(w => w.UserId == userId).Limit(1).FirstOrDefaultAsync();
+
+
+        public async Task UpdateWallPosts(string userId, List<Post> posts)
+        {
+            var filter = Builders<Feed>.Filter.Eq(w => w.UserId, userId);
+
+            var update = Builders<Feed>.Update.Set("Posts", posts);
+
+            var results = await _context.Wall.UpdateManyAsync(filter, update);
+        }
+        public async Task UpdateNewsPosts(string userId, List<Post> posts)
+        {
+            var filter = Builders<Feed>.Filter.Eq(w => w.UserId, userId);
+
+            var update = Builders<Feed>.Update.Set("Posts", posts);
+
+            var results = await _context.News.UpdateManyAsync(filter, update);
+        }
+
+        public async Task ShareAsync(string userId, string postId)
+        {
+            var filter = Builders<Post>.Filter.Eq("_id", ObjectId.Parse(postId));
+            var post = await (await _context.Posts.FindAsync(filter)).FirstOrDefaultAsync();
+
+            var profile = _context.Users.Find(x => x.Id == userId)
+                .Project(x => x.Profile)
+                .SingleOrDefault();
+
+            if (post == null)
+                return;
+
+            Post newPost = new Post
+            {
+                By = new Owner(userId, profile),
+                Share = new Share
+                {
+                    OriginOwner = post.By,
+                    OriginPostId = post.Id
+                },
+                Comments = post.Comments,
+                Likes = post.Likes,
+                Detail = post.Detail,
+                Meta = post.Meta,
+                Type = PostType.Share,
+            };
+            await CreateAsync(newPost);
         }
     }
 }
