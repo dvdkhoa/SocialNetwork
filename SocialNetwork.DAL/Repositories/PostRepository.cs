@@ -223,5 +223,34 @@ namespace SocialNetwork.DAL.Repositories
 
             var results = await _context.News.UpdateManyAsync(filter, update);
         }
+
+        public async Task ShareAsync(string userId, string postId)
+        {
+            var filter = Builders<Post>.Filter.Eq("_id", ObjectId.Parse(postId));
+            var post = await (await _context.Posts.FindAsync(filter)).FirstOrDefaultAsync();
+
+            var profile = _context.Users.Find(x => x.Id == userId)
+                .Project(x => x.Profile)
+                .SingleOrDefault();
+
+            if (post == null)
+                return;
+
+            Post newPost = new Post
+            {
+                By = new Owner(userId, profile),
+                Share = new Share
+                {
+                    OriginOwner = post.By,
+                    OriginPostId = post.Id
+                },
+                Comments = post.Comments,
+                Likes = post.Likes,
+                Detail = post.Detail,
+                Meta = post.Meta,
+                Type = PostType.Share,
+            };
+            await CreateAsync(newPost);
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace SocialNetwork.BLL.Services
 
         public Task UpdateWallPosts(string userId, List<Post> posts);
         public Task UpdateNewsPosts(string userId, List<Post> posts);
+        public Task ShareAsync(string userId, string postId);
 
 
     }

@@ -9,6 +9,7 @@ namespace SocialNetwork.DTO.Entities
         [BsonRepresentation(BsonType.String)]
         public PostType Type { get; set; }
         public Detail Detail { get; set; }
+        public Share? Share { get; set; }
         public List<Comment> Comments { get; set; } = new List<Comment>();
         public List<Like> Likes { get; set; } = new List<Like>();
 

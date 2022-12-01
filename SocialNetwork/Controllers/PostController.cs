@@ -95,6 +95,11 @@ namespace SocialNetwork.Api.Controllers
                     post.Type,
                     post.Meta,
                     post.Detail,
+                    Share = new
+                    {
+                        OriginPostId = post.Share?.OriginPostId.ToString(),
+                        OriginOwner = post.Share?.OriginOwner
+                    },
                     post.Comments,
                     post.Likes
                 };
@@ -122,6 +127,10 @@ namespace SocialNetwork.Api.Controllers
                     post.Meta,
                     post.Type,
                     post.Detail,
+                    Share = new {
+                        OriginPostId = post.Share?.OriginPostId.ToString(),
+                        OriginOwner = post.Share?.OriginOwner
+                    },
                     post.Comments,
                     post.Likes
                 };
@@ -311,6 +320,14 @@ namespace SocialNetwork.Api.Controllers
             {
                 return Ok(ex.Message);
             }
+        }
+
+        [HttpPost("Share")]
+        public async Task<IActionResult> ShareAsync(string userId, string postId)
+        {
+            await _postService.ShareAsync(userId, postId);
+
+            return Ok();
         }
     }
 }

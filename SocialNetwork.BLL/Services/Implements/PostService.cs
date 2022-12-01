@@ -78,6 +78,11 @@ namespace SocialNetwork.BLL.Services.Implements
             return post.Likes.Count();
         }
 
+        public Task ShareAsync(string userId, string postId)
+        {
+            return _postRepository.ShareAsync(userId, postId);
+        }
+
         public Task UpdateNewsPosts(string userId, List<Post> posts)
         {
             return _postRepository.UpdateNewsPosts(userId, posts);
