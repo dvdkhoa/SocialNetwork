@@ -189,15 +189,21 @@ namespace SocialNetwork.Api.Controllers
             });
         }
 
-
-        [HttpPost("GetListFollowings")]
-        public async Task<IActionResult> GetListFollowings(String[] list_id)
+        [HttpPost("GetFollowings")]
+        public async Task<IActionResult> GetListFollowings(String userId)
         {
-            var followings = await _accountService.GetListFollowings(list_id);
+            var followings = await _accountService.GetFollowings(userId);
 
             return Ok(followings);
         }
-        [HttpPost("GetListFollowers")]
+        [HttpPost("GetListFollowings")]
+        public async Task<IActionResult> GetListFollowings(string[] list_userId)
+        {
+            var followings = await _accountService.GetListFollowings(list_userId);
+
+            return Ok(followings);
+        }
+        [HttpPost("GetListFollowers")]  
         public async Task<IActionResult> GetListFollowers(String userId)
         {
             var followers = await _accountService.GetListFollowers(userId);
