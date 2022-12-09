@@ -11,6 +11,7 @@ namespace SocialNetwork.DTO.Entities
         public string? Message { get; set; }
         public string? Thumbnail { get; set; }
         public string? Intent { get; set; }
+        public DateTime? Created { get; set; }
         public bool Seen { get; set; }
     }
 }
