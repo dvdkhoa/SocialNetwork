@@ -1,4 +1,5 @@
 ﻿using SocialNetwork.DAL.Repositories;
+using SocialNetwork.DTO.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,11 @@ namespace SocialNetwork.BLL.Services.Implements
         public Task CreateAsync(string userId, string message, string thumnail, string intent)
         {
             return _notifyRepository.CreateAsync(userId, message, thumnail, intent);
+        }
+
+        public Task<List<Notification>> GetNotifycationByUserAsync(string userId)
+        {
+            return _notifyRepository.GetNotifycationByUserAsync(userId);
         }
     }
 }

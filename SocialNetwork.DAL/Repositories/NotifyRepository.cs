@@ -34,5 +34,14 @@ namespace SocialNetwork.DAL.Repositories
 
             var results = await _context.Users.UpdateOneAsync(filter, update);
         }
+
+        public async Task<List<Notification>> GetNotifycationByUserAsync(string userId)
+        {
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+
+            var user = await _context.Users.Find(filter).FirstAsync();
+
+            return user.Notifications;
+        }
     }
 }
