@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SocialNetwork.DTO.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace SocialNetwork.BLL.Services
     public interface INotifyService
     {
         Task CreateAsync(string userId, string message, string thumnail, string intent);
+        Task<List<Notification>> GetNotifycationByUserAsync(string userId);
 
     }
 }
