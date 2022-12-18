@@ -31,7 +31,7 @@ namespace SocialNetwork.BLL.Services.Implements
 
             var message = $"{user.Profile.Name} vừa bình luận bài đăng của bạn.";
 
-            await _notifyRepository.CreateAsync(userId, message, user.Profile.Image, "comment");
+            await _notifyRepository.CreateAsync(post.By.Id, message, user.Profile.Image, "comment");
 
             var newComment = post.Comments.OrderByDescending(cmt => cmt.Ts).FirstOrDefault();
 

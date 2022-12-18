@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.BLL.Services;
+using SocialNetwork.DTO.Entities;
 
 namespace SocialNetwork.Api.Controllers
 {
@@ -19,7 +20,17 @@ namespace SocialNetwork.Api.Controllers
         {
             var notifications = await _notifyService.GetNotifycationByUserAsync(userId);
 
-            return Ok(notifications);
+            var results = notifications.Select(notify => new
+            {
+                Id = notify.Id.ToString(),
+                Message = notify.Message,
+                Thumbnail = notify.Thumbnail,
+                Intent = notify.Intent,
+                Created = notify.Meta.Created,
+                Seen = notify.Seen
+            });
+
+            return Ok(results);
         }
     }
 }

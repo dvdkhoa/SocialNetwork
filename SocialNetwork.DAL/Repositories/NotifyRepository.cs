@@ -21,7 +21,6 @@ namespace SocialNetwork.DAL.Repositories
         {
             Notification notification = new Notification
             {
-                Created = DateTime.Now,
                 Message = message,
                 Intent = intent,
                 Seen = false,
