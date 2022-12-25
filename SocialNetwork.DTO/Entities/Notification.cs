@@ -12,12 +12,24 @@ namespace SocialNetwork.DTO.Entities
     {
         public string? Message { get; set; }
         public string? Thumbnail { get; set; }
-        public string? Intent { get; set; }
+
+        [BsonRepresentation(BsonType.String)]
+        public NotificationType Type { get; set; }
+
+        public string? IntentId { get; set; }
         public bool Seen { get; set; }
 
         public Notification()
         {
             Id = ObjectId.GenerateNewId();
         }
+    }
+    
+    public enum NotificationType
+    {
+        Like,
+        Comment,
+        Follow,
+        Other
     }
 }

@@ -9,7 +9,7 @@ namespace SocialNetwork.BLL.Services
 {
     public interface INotifyService
     {
-        Task CreateAsync(string userId, string message, string thumnail, string intent);
+        Task CreateAsync(string userId, string message, string thumnail, NotificationType type, string intent);
         Task<List<Notification>> GetNotifycationByUserAsync(string userId);
 
     }
