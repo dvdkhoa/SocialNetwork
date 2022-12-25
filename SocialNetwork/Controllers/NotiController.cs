@@ -25,7 +25,8 @@ namespace SocialNetwork.Api.Controllers
                 Id = notify.Id.ToString(),
                 Message = notify.Message,
                 Thumbnail = notify.Thumbnail,
-                Intent = notify.Intent,
+                Type = notify.Type.ToString(),
+                IntentId = notify.IntentId,
                 Created = notify.Meta.Created,
                 Seen = notify.Seen
             });

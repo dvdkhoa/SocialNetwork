@@ -31,7 +31,8 @@ namespace SocialNetwork.BLL.Services.Implements
 
             var message = $"{user.Profile.Name} vừa bình luận bài đăng của bạn.";
 
-            await _notifyRepository.CreateAsync(post.By.Id, message, user.Profile.Image, "comment");
+            if(userId != post.By.Id)
+                await _notifyRepository.CreateAsync(post.By.Id, message, user.Profile.Image, NotificationType.Comment, postId);
 
             var newComment = post.Comments.OrderByDescending(cmt => cmt.Ts).FirstOrDefault();
 
@@ -65,6 +66,11 @@ namespace SocialNetwork.BLL.Services.Implements
             return await _postRepository.GetNewsFeed(userId, page);
         }
 
+        public Task<Post> GetPostById(string postId)
+        {
+            return _postRepository.GetPostById(postId);
+        }
+
         public Task<Feed> GetWallById(string userId)
         {
             return _postRepository.GetWallById(userId);
@@ -76,6 +82,7 @@ namespace SocialNetwork.BLL.Services.Implements
         }
         public async Task<int> LikeAsync(string userId, string postId)
         {
+            var post = await _postRepository.GetPostById(postId);
             var exists = await _postRepository.LikeExists(userId, postId);
 
             if(exists)
@@ -86,12 +93,12 @@ namespace SocialNetwork.BLL.Services.Implements
 
                 var user = await _userRepository.GetUserResourcesByIdAsync(userId);
 
+
                 var message = $"{user.Profile.Name} vừa like bài đăng của bạn.";
 
-                await _notifyRepository.CreateAsync(userId, message, user.Profile.Image, "");
+                if(userId != post.By.Id)
+                    await _notifyRepository.CreateAsync(post.By.Id, message, user.Profile.Image, NotificationType.Like, postId);
             }    
-
-            var post = await _postRepository.GetPostById(postId);
 
             return post.Likes.Count();
         }

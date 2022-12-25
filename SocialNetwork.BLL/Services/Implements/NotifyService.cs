@@ -17,9 +17,9 @@ namespace SocialNetwork.BLL.Services.Implements
             _notifyRepository = notifyRepository;
         }
 
-        public Task CreateAsync(string userId, string message, string thumnail, string intent)
+        public Task CreateAsync(string userId, string message, string thumnail, NotificationType type, string intent)
         {
-            return _notifyRepository.CreateAsync(userId, message, thumnail, intent);
+            return _notifyRepository.CreateAsync(userId, message, thumnail, type, intent);
         }
 
         public Task<List<Notification>> GetNotifycationByUserAsync(string userId)

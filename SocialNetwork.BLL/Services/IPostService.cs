@@ -9,6 +9,7 @@ namespace SocialNetwork.BLL.Services
 {
     public interface IPostService
     {
+        public Task<Post> GetPostById(string postId);
         public Task<List<Post>> GetNewsFeed(string userId, int page = 0);
         public Task<List<Post>> GetWallFeed(string userId, int page = 0);
         public Task<Post> CreatePostAsync(string userId, string text, params PostFile[]? photos);

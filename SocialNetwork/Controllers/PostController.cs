@@ -346,6 +346,27 @@ namespace SocialNetwork.Api.Controllers
 
             return Ok(postShareViewModel);
         }
+
+
+        [HttpGet("GetPost")]
+        public async Task<IActionResult> GetPost(string postId)
+        {
+            var post = await _postService.GetPostById(postId);
+
+            var postViewModel = new
+            {
+                id = post.Id.ToString(),
+                post.By,
+                post.Type,
+                post.Meta,
+                post.Detail,
+                post.Comments,
+                post.Likes
+            };
+
+
+            return Ok(postViewModel);
+        }
     }
 }
 

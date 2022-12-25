@@ -17,12 +17,13 @@ namespace SocialNetwork.DAL.Repositories
 
         }
 
-        public async Task CreateAsync(string userId, string message, string thumnail, string intent)
+        public async Task CreateAsync(string userId, string message, string thumnail, NotificationType type, string intent)
         {
             Notification notification = new Notification
             {
                 Message = message,
-                Intent = intent,
+                Type= type,
+                IntentId = intent,
                 Seen = false,
                 Thumbnail = thumnail
             };
@@ -39,6 +40,8 @@ namespace SocialNetwork.DAL.Repositories
             var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
 
             var user = await _context.Users.Find(filter).FirstAsync();
+
+            user.Notifications.Reverse(); // Đảo thứ tự
 
             return user.Notifications;
         }
